@@ -84,3 +84,32 @@ class BasicPageTest(TestCase):
             page.path,
             msg='Saving Basic Page instance did not create correct path.'
         )
+
+    def test_nested_basic_page_generates_path(self):
+
+        top_level_page = BasicPage(
+            title='Top Level Page 2',
+            slug='top-level-page-2',
+            parent=None
+        )
+        top_level_page.save()
+
+        nested_page = BasicPage(
+            title='Nested Page 2',
+            slug='nested-page-2',
+            parent=BasicPage.objects.get(slug='top-level-page-2')
+        )
+        nested_page.save()
+
+        page = BasicPage.objects.get(slug='nested-page-2')
+
+        self.assertTrue(
+            page.path,
+            msg='Basic Page instance did not generate path on save.'
+        )
+
+        self.assertEqual(
+            page.path,
+            'top-level-page-2/nested-page-2/',
+            msg='Basic Page instance did not generate correct path on save.'
+        )
