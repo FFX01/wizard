@@ -20,6 +20,7 @@ class BaseAbstractContentObject(models.Model):
     :ivar seo_description: Used for search engine optimization when needed.
     :type seo_description: basestring
     """
+
     title = models.CharField(
         blank=False,
         max_length=120
@@ -51,6 +52,7 @@ class BaseAbstractContentObject(models.Model):
         :returns Passes the instance back to the original overridden save
         method.
         """
+
         if not self.slug:
             self.slug = slugify(self.title)
         super(BaseAbstractContentObject, self).save()
@@ -60,6 +62,7 @@ class ContentObject(BaseAbstractContentObject):
     """
     Basic non-hierarchical content object.
     """
+
     class Meta:
         abstract = True
 
