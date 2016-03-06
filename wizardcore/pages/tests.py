@@ -68,3 +68,19 @@ class BasicPageTest(TestCase):
             child_page.parent,
             parent_page
         )
+
+    def test_basic_page_generates_path(self):
+
+        new_page = BasicPage(
+            title='Test Page Path',
+            slug='test-page-path',
+            parent=None
+        )
+        new_page.save()
+
+        page = BasicPage.objects.get(slug='test-page-path')
+
+        self.assertTrue(
+            page.path,
+            msg='Saving Basic Page instance did not create correct path.'
+        )
