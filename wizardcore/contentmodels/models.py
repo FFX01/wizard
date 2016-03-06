@@ -32,7 +32,9 @@ class BaseAbstractContentObject(models.Model):
 
 
 class ContentObject(BaseAbstractContentObject):
-    pass
+
+    class Meta:
+        abstract = True
 
 
 class NestedContentObject(BaseAbstractContentObject, MPTTModel):
