@@ -14,12 +14,20 @@ class ContentObjectTest(TestCase):
         )
         new_object.save()
 
-        object = models.ContentObject.objects.get(slug='test-object')
+        model = models.ContentObject.objects.get(slug='test-object')
 
         self.assertEqual(
-            object.seo_title,
+            model.title,
+            'Test Object'
+        )
+        self.assertEqual(
+            model.seo_title,
             'Test SEO Title',
             msg='Did not retrieve object.'
+        )
+        self.assertEqual(
+            model.seo_description,
+            'Test SEO Description'
         )
 
     def test_content_object_generates_slug(self):
@@ -29,10 +37,10 @@ class ContentObjectTest(TestCase):
         )
         new_object.save()
 
-        object = models.ContentObject.objects.get(title='New Test Object')
+        model = models.ContentObject.objects.get(title='New Test Object')
 
         self.assertEqual(
-            object.slug,
+            model.slug,
             'new-test-object'
         )
 
@@ -43,5 +51,37 @@ class NestedContentObjectTest(TestCase):
 
         new_model = models.NestedContentObject(
             title='Nested Content Test',
-            slug='nested-content-test'
+            slug='nested-content-test',
+            seo_title='Nested Content Object SEO Title',
+            seo_description='Nested Content Object SEO description.'
+        )
+        new_model.save()
+
+        model = models.NestedContentObject.objects.get(slug='nested-content-test')
+
+        self.assertEqual(
+            model.title,
+            'Nested Content Test'
+        )
+        self.assertEqual(
+            model.seo_title,
+            'Nested Content Object SEO Title'
+        )
+        self.assertEqual(
+            model.seo_description,
+            'Nested Content Object SEO description.'
+        )
+
+    def test_nested_content_object_generates_slug(self):
+
+        new_object = models.NestedContentObject(
+            title='New Test Object'
+        )
+        new_object.save()
+
+        model = models.NestedContentObject.objects.get(title='New Test Object')
+
+        self.assertEqual(
+            model.slug,
+            'new-test-object'
         )

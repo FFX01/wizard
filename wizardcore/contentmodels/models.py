@@ -3,7 +3,7 @@ from django.template.defaultfilters import slugify
 from mptt.models import MPTTModel, TreeForeignKey
 
 
-class ContentObject(models.Model):
+class BaseAbstractContentObject(models.Model):
 
     title = models.CharField(
         blank=False,
@@ -22,7 +22,28 @@ class ContentObject(models.Model):
         max_length=255
     )
 
+    class Meta:
+        abstract = True
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
-        super(ContentObject, self).save()
+        super(BaseAbstractContentObject, self).save()
+
+
+class ContentObject(BaseAbstractContentObject):
+    pass
+
+
+class NestedContentObject(BaseAbstractContentObject, MPTTModel):
+
+    parent = TreeForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        related_name='children'
+    )
+
+    class Meta:
+        abstract = True
+
